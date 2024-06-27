@@ -7,7 +7,7 @@ const server = http.createServer(app)
 const wss = new websocket.Server({ server })
 const fs = require('fs')
 app.use(express.static(__dirname + '/static'))
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }))
 const clients = new Map()
 const songsDataPath = path.join(__dirname, 'songs.json')
 
@@ -28,8 +28,8 @@ function selectRandomID(NSongs) {
 function getSongInfoByPathname(pathname, callback) {
     fs.readFile(songsDataPath, 'utf8', (err, data) => {
     if (err) {
-        callback(err, null);
-        return;
+        callback(err, null)
+        return
     }
     const songsDatabase = JSON.parse(data);
     const song = songsDatabase.find(song => song.PathName === pathname)
@@ -39,7 +39,7 @@ function getSongInfoByPathname(pathname, callback) {
             author: song.author,
             link: song.link
     }
-        callback(null, songInfo);
+        callback(null, songInfo)
     } else {
         callback('Song not found', null)
     }
@@ -86,15 +86,15 @@ function IdToSongPath(id, callback) {
         }
         try {
             const songsData = JSON.parse(data);
-            const targetSong = songsData.find(song => song.ID === id);
+            const targetSong = songsData.find(song => song.ID === id)
             if (targetSong) {
-                console.log("The song is: " + targetSong.Title);
-                callback(targetSong.PathName);
+                console.log("The song is: " + targetSong.Title)
+                callback(targetSong.PathName)
             } else {
-                console.log('There is no song with that id.');
+                console.log('There is no song with that id.')
             }
         } catch (error) {
-            console.error('Error: ', error);
+            console.error('Error: ', error)
         }
     });
 }
@@ -102,28 +102,28 @@ function IdToSongPath(id, callback) {
 function PathNameToSongLength(id, callback) {
     fs.readFile('songs.json', 'utf8', (err, data) => {
         if (err) {
-            console.error('Error: ', err);
-            return;
+            console.error('Error: ', err)
+            return
         }
         try {
-            const songsData = JSON.parse(data);
-            const targetSong = songsData.find(song => song.PathName === id);
+            const songsData = JSON.parse(data)
+            const targetSong = songsData.find(song => song.PathName === id)
             if (targetSong) {
-                callback(targetSong.length);
+                callback(targetSong.length)
             } else {
-                console.log('There is no song with that pathname.');
+                console.log('There is no song with that pathname.')
             }
         } catch (error) {
-            console.error('Error: ', error);
+            console.error('Error: ', error)
         }
     });
 }
 
 wss.on('connection', (ws) => {
-    const clientId = generateUniqueId();
+    const clientId = generateUniqueId()
     clients.set(clientId, ws); 
     ws.on('message', (message) => {
-        const parsedMessage = JSON.parse(message);
+        const parsedMessage = JSON.parse(message)
         switch(parsedMessage.type) {
             case "askCurrentSong":
                 if (started == true) {
