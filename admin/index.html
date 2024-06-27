@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin page</title>
+</head>
+<body>
+    <h1 id="startsongbutton">Start radio</h1>
+    <br><br><br><br>
+    <input type="text" id="nextsonginp">
+    <h1 id="nexsongbutton">Next song</h1>
+</body>
+</html>
+
+
+<script>
+const socket = new WebSocket("ws://localhost:8080");
+socket.addEventListener('open', (event) => {
+    console.log("Connection opened")
+});
+const startButton = document.getElementById('startsongbutton')
+const NextSong = document.getElementById('nextsonginp')
+const NextSongButton = document.getElementById('nextsongbutton')
+
+startButton.addEventListener('click', () => {
+    socket.send(JSON.stringify({
+        type: "start",
+        path: NextSong.value
+    }))
+})
+</script>
